@@ -121,8 +121,81 @@
             text: "Courses"
             font_size: 24
         ScrollView:
-            id: course_layout  # Matches self.ids.course_layout
+            id: course_layout
             do_scroll_x: False
             do_scroll_y: True
             BoxLayout:
-                orientation
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+        Button:
+            text: "Back to Home"
+            size_hint: 0.5, 0.2
+            pos_hint: {"center_x": 0.5}
+            on_press: root.manager.current = "home"
+
+<PamphletScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 10
+        Label:
+            text: "Pamphlets"
+            font_size: 24
+        ScrollView:
+            id: pamphlet_layout
+            do_scroll_x: False
+            do_scroll_y: True
+            BoxLayout:
+                orientation: "vertical"  # Fixed: Added value
+                size_hint_y: None
+                height: self.minimum_height
+        Button:
+            text: "Back to Courses"
+            size_hint: 0.5, 0.2
+            pos_hint: {"center_x": 0.5}
+            on_press: root.manager.current = "course"
+
+<CartScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 10
+        Label:
+            text: "Cart - Assignments"
+            font_size: 24
+        ScrollView:
+            id: cart_layout
+            do_scroll_x: False
+            do_scroll_y: True
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+        Button:
+            text: "Back to Courses"
+            size_hint: 0.5, 0.2
+            pos_hint: {"center_x": 0.5}
+            on_press: root.manager.current = "course"
+
+<AdminScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 10
+        Label:
+            text: "Admin Dashboard"
+            font_size: 24
+        ScrollView:
+            id: admin_layout
+            do_scroll_x: False
+            do_scroll_y: True
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+        Button:
+            text: "Back to Home"
+            size_hint: 0.5, 0.2
+            pos_hint: {"center_x": 0.5}
+            on_press: root.manager.current = "home"
