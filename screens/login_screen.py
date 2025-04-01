@@ -1,5 +1,6 @@
 # screens/login_screen.py
 from kivy.uix.screenmanager import Screen
+from kivy.app import App  # Add this import
 from database import get_user
 
 class LoginScreen(Screen):
@@ -11,8 +12,8 @@ class LoginScreen(Screen):
         if user:
             with open("last_login.txt", "w") as f:
                 f.write(f"{name},{pin}")
-            app = self.manager.get_root()  # Get CarphyApp instance
-            app.current_user = user  # Set app-level current_user
+            app = App.get_running_app()  # Fix here
+            app.current_user = user
             self.manager.current = "home"
             self.ids.name_input.text = ""
             self.ids.pin_input.text = ""

@@ -4,13 +4,14 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
+from kivy.app import App  # Add this import
 from database import add_order, get_orders, update_order_status
 
 class CartScreen(Screen):
     def on_enter(self):
-        app = self.manager.get_root()
+        app = App.get_running_app()  # Fix here
         if not app.current_user or app.current_user[3] in ["admin", "moderator"]:
-            self.manager.current = "home"  # Redirect admin/moderator
+            self.manager.current = "home"
             return
         self.update_cart()
 
@@ -28,7 +29,7 @@ class CartScreen(Screen):
         self.show_pending_orders()
 
     def show_pending_orders(self):
-        app = self.manager.get_root()
+        app = App.get_running_app()  # Fix here
         orders = get_orders(app.current_user[4])
         for order_id, pamphlet, qty, questions, instructions, status in orders:
             if pamphlet != "Online Assignment":
@@ -50,7 +51,7 @@ class CartScreen(Screen):
         self.update_cart()
 
     def submit_assignment(self):
-        app = self.manager.get_root()
+        app = App.get_running_app()  # Fix here
         user_id = app.current_user[4]
         questions = self.questions_input.text
         instructions = self.instructions_input.text

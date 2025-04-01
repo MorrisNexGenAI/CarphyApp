@@ -3,13 +3,14 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
+from kivy.app import App  # Add this import
 from database import get_pamphlets, add_order, get_orders, update_order_status
 
 class PamphletScreen(Screen):
     def on_enter(self):
-        app = self.manager.get_root()
+        app = App.get_running_app()  # Fix here
         if not app.current_user or app.current_user[3] in ["admin", "moderator"]:
-            self.manager.current = "home"  # Redirect admin/moderator
+            self.manager.current = "home"
             return
         
         home_screen = self.manager.get_screen("home")
@@ -36,7 +37,7 @@ class PamphletScreen(Screen):
         ok_btn = Button(text="OK", size_hint=(0.6, 0.25), pos_hint={"center_x": 0.5})
         cancel_btn = Button(text="Cancel", size_hint=(0.6, 0.25), pos_hint={"center_x": 0.5})
         
-        app = self.manager.get_root()
+        app = App.get_running_app()  # Fix here
         user_id = app.current_user[4]
         ok_btn.bind(on_press=lambda x: self.confirm_order(user_id, pamphlet_name))
         cancel_btn.bind(on_press=self.cancel_order)
@@ -66,7 +67,7 @@ class PamphletScreen(Screen):
         self.ids.pamphlet_layout.add_widget(receive_btn)
 
     def mark_received(self, pamphlet_name):
-        app = self.manager.get_root()
+        app = App.get_running_app()  # Fix here
         user_id = app.current_user[4]
         orders = get_orders(user_id)
         for order_id, name, qty, _, _, status in orders:

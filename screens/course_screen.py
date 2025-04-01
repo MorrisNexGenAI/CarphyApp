@@ -3,6 +3,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
+from kivy.app import App  # Add this import
 from database import get_courses
 
 class CourseScreen(Screen):
@@ -12,7 +13,7 @@ class CourseScreen(Screen):
 
     def update_course_list(self, department):
         self.ids.course_layout.clear_widgets()
-        app = self.manager.get_root()
+        app = App.get_running_app()  # Fix: Get the App instance
         if not app.current_user or app.current_user[3] in ["admin", "moderator"]:
             self.ids.course_layout.add_widget(Label(
                 text="Restricted for users only. Use Admin Dashboard.",
