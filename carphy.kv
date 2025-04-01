@@ -1,0 +1,249 @@
+# carphy.kv (replace all with this mobile-friendly version)
+<WelcomeScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 15
+        Label:
+            text: "Welcome to Carphy Order System"
+            font_size: 28
+            size_hint_y: None
+            height: 60
+        Button:
+            text: "Get Started"
+            size_hint: (0.6, 0.25)
+            pos_hint: {"center_x": 0.5}
+            font_size: 20
+            on_press: root.manager.current = "signup"
+
+<SignupScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 15
+        Label:
+            text: "Sign Up"
+            font_size: 28
+            size_hint_y: None
+            height: 60
+        TextInput:
+            id: name_input
+            hint_text: "Enter your name"
+            size_hint_y: None
+            height: 50
+            font_size: 18
+        TextInput:
+            id: pin_input
+            hint_text: "Enter a 4-digit PIN"
+            size_hint_y: None
+            height: 50
+            font_size: 18
+            password: True
+        TextInput:
+            id: dept_input
+            hint_text: "Enter your department (e.g., Business)"
+            size_hint_y: None
+            height: 50
+            font_size: 18
+        Button:
+            text: "Submit"
+            size_hint: (0.6, 0.25)
+            pos_hint: {"center_x": 0.5}
+            font_size: 20
+            on_press: root.submit_signup()
+        Label:
+            id: status_label
+            text: ""
+            size_hint_y: None
+            height: 40
+            font_size: 16
+        Button:
+            text: "Already have an account? Log In"
+            size_hint: (0.6, 0.15)
+            pos_hint: {"center_x": 0.5}
+            font_size: 16
+            on_press: root.manager.current = "login"
+
+<LoginScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 15
+        Label:
+            text: "Log In"
+            font_size: 28
+            size_hint_y: None
+            height: 60
+        TextInput:
+            id: name_input
+            hint_text: "Enter your name"
+            size_hint_y: None
+            height: 50
+            font_size: 18
+        TextInput:
+            id: pin_input
+            hint_text: "Enter your PIN"
+            size_hint_y: None
+            height: 50
+            font_size: 18
+            password: True
+        Button:
+            text: "Log In"
+            size_hint: (0.6, 0.25)
+            pos_hint: {"center_x": 0.5}
+            font_size: 20
+            on_press: root.submit_login()
+        Label:
+            id: status_label
+            text: ""
+            size_hint_y: None
+            height: 40
+            font_size: 16
+        Button:
+            text: "Don’t have an account? Sign Up"
+            size_hint: (0.6, 0.15)
+            pos_hint: {"center_x": 0.5}
+            font_size: 16
+            on_press: root.manager.current = "signup"
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 10
+            Button:
+                text: "Back"
+                size_hint_x: 0.5
+                font_size: 18
+                on_press: root.manager.current = "welcome"
+            Button:
+                text: "Home"
+                size_hint_x: 0.5
+                font_size: 18
+                on_press: root.manager.current = "home"
+
+<HomeScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 15
+        Label:
+            text: "Select a Department"
+            font_size: 28
+            size_hint_y: None
+            height: 60
+        ScrollView:
+            GridLayout:
+                id: dept_layout
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 10
+            Button:
+                text: "Back"
+                size_hint_x: 0.5
+                font_size: 18
+                on_press: root.manager.current = "login"
+            Button:
+                text: "Home"
+                size_hint_x: 0.5
+                font_size: 18
+                on_press: root.manager.current = "home"
+<CourseScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 15
+        Label:
+            text: "Select a Course"
+            font_size: 28
+            size_hint_y: None
+            height: 60
+        ScrollView:
+            GridLayout:
+                id: course_layout
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 10
+            Button:
+                text: "Back"
+                size_hint_x: 0.5
+                font_size: 18
+                on_press: root.manager.current = "home"
+            Button:
+                text: "Home"
+                size_hint_x: 0.5
+                font_size: 18
+                on_press: root.manager.current = "home"
+
+<PamphletScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 15
+        Label:
+            text: "Buy Pamphlet"
+            font_size: 28
+            size_hint_y: None
+            height: 60
+        ScrollView:
+            GridLayout:
+                id: pamphlet_layout
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 10
+            Button:
+                text: "Back"
+                size_hint_x: 0.5
+                font_size: 18
+                on_press: root.manager.current = "course"
+            Button:
+                text: "Home"
+                size_hint_x: 0.5
+                font_size: 18
+                on_press: root.manager.current = "home"
+
+# carphy.kv (add at end)
+<AdminScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 15
+        Label:
+            text: "Admin Dashboard"
+            font_size: 28
+            size_hint_y: None
+            height: 60
+        ScrollView:
+            GridLayout:
+                id: admin_layout
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            spacing: 10
+            Button:
+                text: "Back"
+                size_hint_x: 0.5
+                font_size: 18
+                on_press: root.manager.current = "home"
+            Button:
+                text: "Home"
+                size_hint_x: 0.5
+                font_size: 18
+                on_press: root.manager.current = "home"
