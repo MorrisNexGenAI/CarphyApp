@@ -1,0 +1,43 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install Buildozer and dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y python3-pip python3-dev git build-essential libssl-dev libffi-dev openjdk-17-jdk zlib1g-dev libsqlite3-dev
+        pip3 install cython==0.29.36 kivy==2.1.0 buildozer
+
+    - name: Initialize Buildozer
+      run: |
+        buildozer init
+        sed -i 's/requirements =/requirements = python3,kivy==2.1.0,sqlite3/' buildozer.spec
+        sed -i 's/android.permissions =/android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE/' buildozer.spec
+        sed -i 's/android.api =/android.api = 33/' buildozer.spec
+        sed -i 's/android.minapi =/android.minapi = 21/' buildozer.spec
+        sed -i 's/android.sdk =/android.sdk = 20/' buildozer.spec
+        sed -i 's/android.ndk =/android.ndk = 23b/' buildozer.spec
+
+    - name: Build APK
+      run: buildozer -v android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: carphyapp-apk
+        path: bin/*.apk
