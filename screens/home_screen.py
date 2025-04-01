@@ -1,7 +1,7 @@
 # screens/home_screen.py
 from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
-from kivy.uix.label import Label  # Added for clarity, though not used here
+from kivy.app import App
 from database import get_departments
 
 class HomeScreen(Screen):
@@ -9,7 +9,8 @@ class HomeScreen(Screen):
         self.update_department_list()
 
     def update_department_list(self):
-        self.ids.dept_layout.clear_widgets()
+        layout = self.ids.dept_layout.children[0]
+        layout.clear_widgets()
         departments = get_departments()
         for dept in departments:
             btn = Button(
@@ -18,18 +19,30 @@ class HomeScreen(Screen):
                 height=50,
                 on_press=lambda x, d=dept: self.select_department(d)
             )
-            self.ids.dept_layout.add_widget(btn)
+            layout.add_widget(btn)
         
-        # Hidden admin button (top-right corner, subtle)
-        if hasattr(self.manager, "current_user") and self.manager.current_user[3] in ["admin", "moderator"]:
-            admin_btn = Button(
-                text="A",
+        app = App.get_running_app()
+        if app.current_user:
+            # Admin button
+            if app.current_user[3] in ["admin", "moderator"]:
+                admin_btn = Button(
+                    text="A",
+                    size_hint=(0.1, 0.1),
+                    pos_hint={"right": 1, "top": 1},
+                    background_color=(0.5, 0.5, 0.5, 0.5),
+                    on_press=self.go_to_admin
+                )
+                self.add_widget(admin_btn)
+            
+            # Profile button
+            profile_btn = Button(
+                text="P",
                 size_hint=(0.1, 0.1),
-                pos_hint={"right": 1, "top": 1},
-                background_color=(0.5, 0.5, 0.5, 0.5),  # Subtle gray
-                on_press=self.go_to_admin  # Use a method instead of lambda
+                pos_hint={"right": 0.85, "top": 1},  # Slightly left of "A"
+                background_color=(0.5, 0.5, 0.5, 0.5),
+                on_press=self.go_to_profile
             )
-            self.add_widget(admin_btn)
+            self.add_widget(profile_btn)
 
     def select_department(self, department):
         self.selected_department = department
@@ -37,3 +50,6 @@ class HomeScreen(Screen):
 
     def go_to_admin(self, *args):
         self.manager.current = "admin"
+
+    def go_to_profile(self, *args):
+        self.manager.current = "profile"

@@ -20,6 +20,9 @@
             pos_hint: {"center_x": 0.5}
             on_press: root.manager.current = "login"
 
+# carphy.kv (partial - only SignupScreen updated for brevity)
+#:kivy 2.1.0
+
 <SignupScreen>:
     BoxLayout:
         orientation: "vertical"
@@ -28,36 +31,41 @@
         Label:
             text: "Signup"
             font_size: 24
+            color: 0, 0.5, 1, 1  # Blue for a student-friendly vibe
         TextInput:
             id: name_input
             hint_text: "Enter your name"
+            size_hint_y: None
+            height: 50
         TextInput:
             id: pin_input
             hint_text: "Enter your PIN"
             password: True
-        Spinner:
-            id: dept_spinner
-            text: "Select Department"
-            values: ["Computer Science", "Engineering", "Mathematics"]
-        Spinner:
-            id: role_spinner
-            text: "Select Role"
-            values: ["user", "moderator", "admin"]
+            size_hint_y: None
+            height: 50
+        TextInput:
+            id: dept_input  # Changed from Spinner
+            hint_text: "Enter your department"
+            size_hint_y: None
+            height: 50
         Button:
             text: "Submit"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
+            background_color: 0, 0.7, 0, 1  # Green for positivity
             on_press: root.submit_signup()
         Label:
             id: status_label
             text: ""
-            color: 1, 0, 0, 1  # Red for errors
+            color: 1, 0, 0, 1
+            size_hint_y: None
+            height: 40
         Button:
             text: "Back to Welcome"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
+            background_color: 0.5, 0.5, 0.5, 1  # Gray for neutrality
             on_press: root.manager.current = "welcome"
-
 <LoginScreen>:
     BoxLayout:
         orientation: "vertical"
@@ -96,21 +104,19 @@
         Label:
             text: "Home - Select Department"
             font_size: 24
-        Spinner:
-            id: dept_spinner
-            text: "Select Department"
-            values: ["Computer Science", "Engineering", "Mathematics"]
-            on_text: root.select_department(self.text)
+        ScrollView:
+            id: dept_layout
+            do_scroll_x: False
+            do_scroll_y: True
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
         Button:
             text: "Go to Courses"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
             on_press: root.manager.current = "course"
-        Button:
-            text: "Admin Dashboard (A)"
-            size_hint: 0.5, 0.2
-            pos_hint: {"center_x": 0.5}
-            on_press: root.manager.current = "admin"
 
 <CourseScreen>:
     BoxLayout:
@@ -147,7 +153,7 @@
             do_scroll_x: False
             do_scroll_y: True
             BoxLayout:
-                orientation: "vertical"  # Fixed: Added value
+                orientation: "vertical"
                 size_hint_y: None
                 height: self.minimum_height
         Button:
@@ -198,4 +204,31 @@
             text: "Back to Home"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
+            on_press: root.manager.current = "home"
+
+<ProfileScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 10
+        Label:
+            text: "Your Profile"
+            font_size: 28
+            color: 0, 0.5, 1, 1  # Blue header
+            size_hint_y: None
+            height: 60
+        ScrollView:
+            id: profile_layout
+            do_scroll_x: False
+            do_scroll_y: True
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: [10, 0, 10, 0]  # Slight padding for content
+        Button:
+            text: "Back to Home"
+            size_hint: 0.5, 0.2
+            pos_hint: {"center_x": 0.5}
+            background_color: 0.5, 0.5, 0.5, 1  # Gray
             on_press: root.manager.current = "home"

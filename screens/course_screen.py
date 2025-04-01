@@ -23,6 +23,11 @@ class CourseScreen(Screen):
             return
 
         courses = get_courses(department)
+        
+        # Create a parent layout to hold all course rows
+        course_list_container = BoxLayout(orientation="vertical", size_hint_y=None)
+        course_list_container.height = len(courses) * 60  # Adjust the height based on the number of courses
+
         for course in courses:
             row = BoxLayout(orientation="horizontal", size_hint_y=None, height=60)
             row.add_widget(Label(text=course, size_hint_x=0.5))
@@ -32,7 +37,12 @@ class CourseScreen(Screen):
             assign_btn = Button(text="Do Assignment", size_hint_x=0.25)
             assign_btn.bind(on_press=lambda x, c=course: self.do_assignment(c))
             row.add_widget(assign_btn)
-            self.ids.course_layout.add_widget(row)
+            
+            # Add the row to the parent container
+            course_list_container.add_widget(row)
+
+        # Add the parent container to the ScrollView
+        self.ids.course_layout.add_widget(course_list_container)
 
     def buy_pamphlet(self, course):
         self.selected_course = course
