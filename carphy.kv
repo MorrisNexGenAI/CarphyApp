@@ -1,249 +1,128 @@
-# carphy.kv (replace all with this mobile-friendly version)
+# carphy.kv
+#:kivy 2.1.0
+
 <WelcomeScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 15
+        spacing: 10
         Label:
             text: "Welcome to Carphy Order System"
-            font_size: 28
-            size_hint_y: None
-            height: 60
+            font_size: 24
         Button:
-            text: "Get Started"
-            size_hint: (0.6, 0.25)
+            text: "Signup"
+            size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
-            font_size: 20
             on_press: root.manager.current = "signup"
+        Button:
+            text: "Login"
+            size_hint: 0.5, 0.2
+            pos_hint: {"center_x": 0.5}
+            on_press: root.manager.current = "login"
 
 <SignupScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 15
+        spacing: 10
         Label:
-            text: "Sign Up"
-            font_size: 28
-            size_hint_y: None
-            height: 60
+            text: "Signup"
+            font_size: 24
         TextInput:
             id: name_input
             hint_text: "Enter your name"
-            size_hint_y: None
-            height: 50
-            font_size: 18
         TextInput:
             id: pin_input
-            hint_text: "Enter a 4-digit PIN"
-            size_hint_y: None
-            height: 50
-            font_size: 18
+            hint_text: "Enter your PIN"
             password: True
-        TextInput:
-            id: dept_input
-            hint_text: "Enter your department (e.g., Business)"
-            size_hint_y: None
-            height: 50
-            font_size: 18
+        Spinner:
+            id: dept_spinner
+            text: "Select Department"
+            values: ["Computer Science", "Engineering", "Mathematics"]
+        Spinner:
+            id: role_spinner
+            text: "Select Role"
+            values: ["user", "moderator", "admin"]
         Button:
             text: "Submit"
-            size_hint: (0.6, 0.25)
+            size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
-            font_size: 20
             on_press: root.submit_signup()
         Label:
             id: status_label
             text: ""
-            size_hint_y: None
-            height: 40
-            font_size: 16
+            color: 1, 0, 0, 1  # Red for errors
         Button:
-            text: "Already have an account? Log In"
-            size_hint: (0.6, 0.15)
+            text: "Back to Welcome"
+            size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
-            font_size: 16
-            on_press: root.manager.current = "login"
+            on_press: root.manager.current = "welcome"
 
 <LoginScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 15
+        spacing: 10
         Label:
-            text: "Log In"
-            font_size: 28
-            size_hint_y: None
-            height: 60
+            text: "Login"
+            font_size: 24
         TextInput:
             id: name_input
             hint_text: "Enter your name"
-            size_hint_y: None
-            height: 50
-            font_size: 18
         TextInput:
             id: pin_input
             hint_text: "Enter your PIN"
-            size_hint_y: None
-            height: 50
-            font_size: 18
             password: True
         Button:
-            text: "Log In"
-            size_hint: (0.6, 0.25)
+            text: "Submit"
+            size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
-            font_size: 20
             on_press: root.submit_login()
         Label:
             id: status_label
             text: ""
-            size_hint_y: None
-            height: 40
-            font_size: 16
+            color: 1, 0, 0, 1
         Button:
-            text: "Don’t have an account? Sign Up"
-            size_hint: (0.6, 0.15)
+            text: "Back to Welcome"
+            size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
-            font_size: 16
-            on_press: root.manager.current = "signup"
-        BoxLayout:
-            size_hint_y: None
-            height: 60
-            spacing: 10
-            Button:
-                text: "Back"
-                size_hint_x: 0.5
-                font_size: 18
-                on_press: root.manager.current = "welcome"
-            Button:
-                text: "Home"
-                size_hint_x: 0.5
-                font_size: 18
-                on_press: root.manager.current = "home"
+            on_press: root.manager.current = "welcome"
 
 <HomeScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 15
+        spacing: 10
         Label:
-            text: "Select a Department"
-            font_size: 28
-            size_hint_y: None
-            height: 60
-        ScrollView:
-            GridLayout:
-                id: dept_layout
-                cols: 1
-                size_hint_y: None
-                height: self.minimum_height
-                spacing: 10
-        BoxLayout:
-            size_hint_y: None
-            height: 60
-            spacing: 10
-            Button:
-                text: "Back"
-                size_hint_x: 0.5
-                font_size: 18
-                on_press: root.manager.current = "login"
-            Button:
-                text: "Home"
-                size_hint_x: 0.5
-                font_size: 18
-                on_press: root.manager.current = "home"
+            text: "Home - Select Department"
+            font_size: 24
+        Spinner:
+            id: dept_spinner
+            text: "Select Department"
+            values: ["Computer Science", "Engineering", "Mathematics"]
+            on_text: root.select_department(self.text)
+        Button:
+            text: "Go to Courses"
+            size_hint: 0.5, 0.2
+            pos_hint: {"center_x": 0.5}
+            on_press: root.manager.current = "course"
+        Button:
+            text: "Admin Dashboard (A)"
+            size_hint: 0.5, 0.2
+            pos_hint: {"center_x": 0.5}
+            on_press: root.manager.current = "admin"
+
 <CourseScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 15
+        spacing: 10
         Label:
-            text: "Select a Course"
-            font_size: 28
-            size_hint_y: None
-            height: 60
+            text: "Courses"
+            font_size: 24
         ScrollView:
-            GridLayout:
-                id: course_layout
-                cols: 1
-                size_hint_y: None
-                height: self.minimum_height
-                spacing: 10
-        BoxLayout:
-            size_hint_y: None
-            height: 60
-            spacing: 10
-            Button:
-                text: "Back"
-                size_hint_x: 0.5
-                font_size: 18
-                on_press: root.manager.current = "home"
-            Button:
-                text: "Home"
-                size_hint_x: 0.5
-                font_size: 18
-                on_press: root.manager.current = "home"
-
-<PamphletScreen>:
-    BoxLayout:
-        orientation: "vertical"
-        padding: 20
-        spacing: 15
-        Label:
-            text: "Buy Pamphlet"
-            font_size: 28
-            size_hint_y: None
-            height: 60
-        ScrollView:
-            GridLayout:
-                id: pamphlet_layout
-                cols: 1
-                size_hint_y: None
-                height: self.minimum_height
-                spacing: 10
-        BoxLayout:
-            size_hint_y: None
-            height: 60
-            spacing: 10
-            Button:
-                text: "Back"
-                size_hint_x: 0.5
-                font_size: 18
-                on_press: root.manager.current = "course"
-            Button:
-                text: "Home"
-                size_hint_x: 0.5
-                font_size: 18
-                on_press: root.manager.current = "home"
-
-# carphy.kv (add at end)
-<AdminScreen>:
-    BoxLayout:
-        orientation: "vertical"
-        padding: 20
-        spacing: 15
-        Label:
-            text: "Admin Dashboard"
-            font_size: 28
-            size_hint_y: None
-            height: 60
-        ScrollView:
-            GridLayout:
-                id: admin_layout
-                cols: 1
-                size_hint_y: None
-                height: self.minimum_height
-                spacing: 10
-        BoxLayout:
-            size_hint_y: None
-            height: 60
-            spacing: 10
-            Button:
-                text: "Back"
-                size_hint_x: 0.5
-                font_size: 18
-                on_press: root.manager.current = "home"
-            Button:
-                text: "Home"
-                size_hint_x: 0.5
-                font_size: 18
-                on_press: root.manager.current = "home"
+            id: course_layout  # Matches self.ids.course_layout
+            do_scroll_x: False
+            do_scroll_y: True
+            BoxLayout:
+                orientation
