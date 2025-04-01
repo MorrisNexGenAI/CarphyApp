@@ -36,6 +36,13 @@ jobs:
     - name: Build APK
       run: buildozer -v android debug
 
+    - name: Check if APK exists
+      run: |
+        if [ ! -f bin/*.apk ]; then
+          echo "APK not found!"
+          exit 1
+        fi
+
     - name: Upload APK
       uses: actions/upload-artifact@v3
       with:
