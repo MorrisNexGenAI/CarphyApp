@@ -9,7 +9,8 @@ class SignupScreen(Screen):
         dept = self.ids.dept_input.text
         
         if name and pin and dept:
-            if add_user(name, pin, dept):
+            # Default role to "user" since no selection
+            if add_user(name, pin, dept, "user"):
                 self.manager.current = "login"
                 self.clear_inputs()
             else:
