@@ -1,58 +1,64 @@
-# carphy.kv
 #:kivy 2.1.0
 
 <WelcomeScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 10
+        spacing: 15
         Label:
             text: "Welcome to Carphy Order System"
-            font_size: 24
+            font_size: 28
+            color: 0, 0.5, 1, 1
+            size_hint_y: None
+            height: 60
         Button:
             text: "Signup"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
+            background_color: 0, 0.7, 0, 1
             on_press: root.manager.current = "signup"
         Button:
             text: "Login"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
+            background_color: 0, 0.7, 0, 1
             on_press: root.manager.current = "login"
-
-# carphy.kv (partial - only SignupScreen updated for brevity)
-#:kivy 2.1.0
 
 <SignupScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 10
+        spacing: 15
         Label:
             text: "Signup"
-            font_size: 24
-            color: 0, 0.5, 1, 1  # Blue for a student-friendly vibe
+            font_size: 28
+            color: 0, 0.5, 1, 1
+            size_hint_y: None
+            height: 60
         TextInput:
             id: name_input
             hint_text: "Enter your name"
             size_hint_y: None
             height: 50
+            multiline: False
         TextInput:
             id: pin_input
             hint_text: "Enter your PIN"
             password: True
             size_hint_y: None
             height: 50
+            multiline: False
         TextInput:
-            id: dept_input  # Changed from Spinner
+            id: dept_input
             hint_text: "Enter your department"
             size_hint_y: None
             height: 50
+            multiline: False
         Button:
             text: "Submit"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
-            background_color: 0, 0.7, 0, 1  # Green for positivity
+            background_color: 0, 0.7, 0, 1
             on_press: root.submit_signup()
         Label:
             id: status_label
@@ -64,131 +70,179 @@
             text: "Back to Welcome"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
-            background_color: 0.5, 0.5, 0.5, 1  # Gray for neutrality
+            background_color: 0.5, 0.5, 0.5, 1
             on_press: root.manager.current = "welcome"
+
 <LoginScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 10
+        spacing: 15
         Label:
             text: "Login"
-            font_size: 24
+            font_size: 28
+            color: 0, 0.5, 1, 1
+            size_hint_y: None
+            height: 60
         TextInput:
             id: name_input
             hint_text: "Enter your name"
+            size_hint_y: None
+            height: 50
+            multiline: False
         TextInput:
             id: pin_input
             hint_text: "Enter your PIN"
             password: True
+            size_hint_y: None
+            height: 50
+            multiline: False
         Button:
             text: "Submit"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
+            background_color: 0, 0.7, 0, 1
             on_press: root.submit_login()
         Label:
             id: status_label
             text: ""
             color: 1, 0, 0, 1
+            size_hint_y: None
+            height: 40
         Button:
             text: "Back to Welcome"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
+            background_color: 0.5, 0.5, 0.5, 1
             on_press: root.manager.current = "welcome"
 
 <HomeScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 10
+        spacing: 15
         Label:
             text: "Home - Select Department"
-            font_size: 24
+            font_size: 28
+            color: 0, 0.5, 1, 1
+            size_hint_y: None
+            height: 60
         ScrollView:
             id: dept_layout
             do_scroll_x: False
             do_scroll_y: True
+            size_hint_y: 0.7
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
                 height: self.minimum_height
-        Button:
-            text: "Go to Courses"
-            size_hint: 0.5, 0.2
-            pos_hint: {"center_x": 0.5}
-            on_press: root.manager.current = "course"
+                spacing: 5
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: 0.2
+            spacing: 10
+            Button:
+                text: "Go to Courses"
+                size_hint: 0.5, 1
+                background_color: 0, 0.7, 0, 1
+                on_press: root.manager.current = "course"
+            Button:
+                text: "Logout"
+                size_hint: 0.5, 1
+                background_color: 1, 0, 0, 1
+                on_press: 
+                    app.current_user = None
+                    root.manager.current = "welcome"
 
 <CourseScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 10
+        spacing: 15
         Label:
             text: "Courses"
-            font_size: 24
+            font_size: 28
+            color: 0, 0.5, 1, 1
+            size_hint_y: None
+            height: 60
         ScrollView:
             id: course_layout
             do_scroll_x: False
             do_scroll_y: True
+            size_hint_y: 0.7
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
                 height: self.minimum_height
+                spacing: 5
         Button:
             text: "Back to Home"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
+            background_color: 0.5, 0.5, 0.5, 1
             on_press: root.manager.current = "home"
 
 <PamphletScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 10
+        spacing: 15
         Label:
             text: "Pamphlets"
-            font_size: 24
+            font_size: 28
+            color: 0, 0.5, 1, 1
+            size_hint_y: None
+            height: 60
         ScrollView:
             id: pamphlet_layout
             do_scroll_x: False
             do_scroll_y: True
+            size_hint_y: 0.7
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
                 height: self.minimum_height
+                spacing: 5
         Button:
             text: "Back to Courses"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
+            background_color: 0.5, 0.5, 0.5, 1
             on_press: root.manager.current = "course"
 
 <CartScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 10
+        spacing: 15
         Label:
             text: "Cart - Assignments"
-            font_size: 24
+            font_size: 28
+            color: 0, 0.5, 1, 1
+            size_hint_y: None
+            height: 60
         ScrollView:
             id: cart_layout
             do_scroll_x: False
             do_scroll_y: True
+            size_hint_y: 0.7
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
                 height: self.minimum_height
+                spacing: 5
         Button:
             text: "Back to Courses"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
+            background_color: 0.5, 0.5, 0.5, 1
             on_press: root.manager.current = "course"
 
 <AdminScreen>:
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 10
+        spacing: 15
         Label:
             text: "Admin Dashboard"
             font_size: 28
@@ -198,23 +252,33 @@
         ScrollView:
             id: user_list
             size_hint_y: 0.3
+            do_scroll_x: False
+            do_scroll_y: True
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
                 height: self.minimum_height
+                spacing: 5
         ScrollView:
             id: order_list
-            size_hint_y: 0.6
+            size_hint_y: 0.5
+            do_scroll_x: False
+            do_scroll_y: True
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
                 height: self.minimum_height
+                spacing: 5
         ScrollView:
             id: admin_layout
+            size_hint_y: 0.2
+            do_scroll_x: False
+            do_scroll_y: True
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
                 height: self.minimum_height
+                spacing: 5
         Button:
             text: "Back to Home"
             size_hint: 0.5, 0.2
@@ -226,25 +290,33 @@
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 10
+        spacing: 15
         Label:
             text: "Moderator Dashboard"
-            font_size: 24
+            font_size: 28
             color: 0.4, 0, 0.8, 1
             size_hint_y: None
             height: 60
         ScrollView:
             id: order_list
+            size_hint_y: 0.7
+            do_scroll_x: False
+            do_scroll_y: True
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
                 height: self.minimum_height
+                spacing: 5
         ScrollView:
             id: moderator_layout
+            size_hint_y: 0.2
+            do_scroll_x: False
+            do_scroll_y: True
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
                 height: self.minimum_height
+                spacing: 5
         Button:
             text: "Back to Home"
             size_hint: 0.5, 0.2
@@ -256,25 +328,66 @@
     BoxLayout:
         orientation: "vertical"
         padding: 20
-        spacing: 10
+        spacing: 15
         Label:
             text: "Your Profile"
             font_size: 28
-            color: 0, 0.5, 1, 1  # Blue header
+            color: 0, 0.5, 1, 1
             size_hint_y: None
             height: 60
         ScrollView:
             id: profile_layout
             do_scroll_x: False
             do_scroll_y: True
+            size_hint_y: 0.7
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
                 height: self.minimum_height
-                padding: [10, 0, 10, 0]  # Slight padding for content
+                padding: [10, 0, 10, 0]
+                spacing: 5
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: 0.2
+            spacing: 10
+            Button:
+                text: "Back to Home"
+                size_hint: 0.5, 1
+                background_color: 0.5, 0.5, 0.5, 1
+                on_press: root.manager.current = "home"
+            Button:
+                text: "Logout"
+                size_hint: 0.5, 1
+                background_color: 1, 0, 0, 1
+                on_press: 
+                    app.current_user = None
+                    root.manager.current = "welcome"
+
+<StockScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 15
+        Label:
+            text: "Stock Management"
+            font_size: 28
+            color: 0, 0.5, 1, 1
+            size_hint_y: None
+            height: 60
+        ScrollView:
+            id: stock_layout
+            do_scroll_x: False
+            do_scroll_y: True
+            size_hint_y: 0.7
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 5
         Button:
-            text: "Back to Home"
+            text: "Back"
             size_hint: 0.5, 0.2
             pos_hint: {"center_x": 0.5}
-            background_color: 0.5, 0.5, 0.5, 1  # Gray
-            on_press: root.manager.current = "home"
+            background_color: 0.5, 0.5, 0.5, 1
+            on_press: 
+                root.manager.current = "admin" if app.current_user[3] == "admin" else "moderator"

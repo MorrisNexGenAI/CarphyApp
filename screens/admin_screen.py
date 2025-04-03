@@ -61,13 +61,16 @@ class AdminScreen(Screen):
         layout.add_widget(add_box)
         self.feedback_label = Label(text="", size_hint_y=None, height=40)
         layout.add_widget(self.feedback_label)
+        
+        # Stock Management Button (Fixed)
+        stock_btn = Button(text="Manage Stock", size_hint_y=None, height=40, background_color=(0, 0.7, 0, 1))
+        stock_btn.bind(on_press=self.go_to_stock)  # Use a method instead of lambda with assignment
+        layout.add_widget(stock_btn)
 
         # Users List
         user_layout = self.ids.user_list.children[0]
         user_layout.clear_widgets()
         users = get_users()
-        if not users:
-            user_layout.add_widget(Label(text="No users", size_hint_y=None, height=40))
         for user_id, name, dept, role in users:
             self.add_user_row(user_layout, user_id, name, dept, role)
 
@@ -79,6 +82,9 @@ class AdminScreen(Screen):
             order_layout.add_widget(Label(text="No orders", size_hint_y=None, height=40))
         for order_id, pamphlet, qty, questions, instructions, status, user_id in orders:
             self.add_order_row(order_layout, order_id, pamphlet, qty, questions, status, user_id)
+
+    def go_to_stock(self, instance):  # New method to handle navigation
+        self.manager.current = "stock"
 
     def set_role(self, role, dropdown):
         self.role_btn.text = role
@@ -94,8 +100,7 @@ class AdminScreen(Screen):
             return
         if name and pin and dept:
             user_id = add_user(name, pin, dept, role)
-            user_layout = self.ids.user_list.children[0]
-            self.add_user_row(user_layout, user_id, name, dept, role)
+            self.add_user_row(self.ids.user_list.children[0], user_id, name, dept, role)
             self.name_input.text = ""
             self.pin_input.text = ""
             self.dept_input.text = ""

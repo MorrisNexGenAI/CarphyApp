@@ -1,60 +1,50 @@
 # screens/profile_screen.py
 from kivy.uix.screenmanager import Screen
 from kivy.uix.label import Label
-from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.scrollview import ScrollView
 from kivy.app import App
+from database import get_orders
 
 class ProfileScreen(Screen):
     def on_enter(self):
-        print("Entering ProfileScreen")  # Debug
-        self.show_profile()
+        self.update_profile()
 
-    def show_profile(self):
-        layout = self.ids.profile_layout.children[0]
-        layout.clear_widgets()
-        
+    def update_profile(self):
         app = App.get_running_app()
         if not app.current_user:
-            print("No current_user, redirecting to login")  # Debug
             self.manager.current = "login"
             return
         
+        # Get user details (name, pin, dept, role, id)
         name, _, dept, role, user_id = app.current_user
-        layout.add_widget(Label(
-            text=f"{name}\n[size=18]{dept}[/size]",
-            markup=True,
-            size_hint_y=None,
-            height=80,
-            halign="center",
-            font_size=24
-        ))
-        layout.add_widget(Label(
-            text=f"Role: {role.capitalize()}",
-            size_hint_y=None,
-            height=50
-        ))
-        layout.add_widget(Label(
-            text=f"User ID: {user_id}",
-            size_hint_y=None,
-            height=50
-        ))
         
-        logout_btn = Button(
-            text="Logout",
-            size_hint=(0.5, 0.2),
-            pos_hint={"center_x": 0.5},
-            background_color=(1, 0, 0, 1)
-        )
-        logout_btn.bind(on_press=self.logout)  # Ensure binding
-        layout.add_widget(logout_btn)
-        print("Logout button added")  # Debug
-
-    def logout(self, instance):  # Changed *args to instance for clarity
-        print("Logout button pressed")  # Debug
-        app = App.get_running_app()
-        print(f"Current user before logout: {app.current_user}")  # Debug
-        app.current_user = None
-        print(f"Current user after logout: {app.current_user}")  # Debug
-        self.manager.current = "login"
-        print("Navigating to login screen")  # Debug
+        # Clear existing layout (ScrollView's child)
+        layout = self.ids.profile_layout.children[0]  # Get the BoxLayout inside ScrollView
+        layout.clear_widgets()
+        
+        # User Info
+        info_box = BoxLayout(orientation="vertical", size_hint_y=None, height=100)
+        info_box.add_widget(Label(text=f"Name: {name}", font_size=20, size_hint_y=None, height=30))
+        info_box.add_widget(Label(text=f"Department: {dept}", font_size=20, size_hint_y=None, height=30))
+        info_box.add_widget(Label(text=f"Role: {role.capitalize()}", font_size=20, size_hint_y=None, height=30))
+        layout.add_widget(info_box)
+        
+        # Order History
+        order_list = BoxLayout(orientation="vertical", size_hint_y=None)
+        order_list.bind(minimum_height=order_list.setter('height'))
+        
+        orders = get_orders(user_id)
+        if not orders:
+            order_list.add_widget(Label(text="No orders yet", size_hint_y=None, height=40))
+        else:
+            for order in orders:
+                order_id, pamphlet_name, qty, questions, instructions, status = order
+                order_row = BoxLayout(orientation="horizontal", size_hint_y=None, height=50)
+                order_row.add_widget(Label(text=f"Order #{order_id}", size_hint_x=0.2))
+                order_row.add_widget(Label(text=pamphlet_name, size_hint_x=0.3))
+                order_row.add_widget(Label(text=f"Qty: {qty}", size_hint_x=0.15))
+                order_row.add_widget(Label(text=status.capitalize(), size_hint_x=0.25))
+                order_list.add_widget(order_row)
+        
+        layout.add_widget(order_list)

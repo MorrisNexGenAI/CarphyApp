@@ -1,3 +1,4 @@
+# main.py
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager
 from kivy.lang import Builder
@@ -10,8 +11,13 @@ from screens.pamphlet_screen import PamphletScreen
 from screens.cart_screen import CartScreen
 from screens.admin_screen import AdminScreen
 from screens.moderator_screen import ModeratorScreen
-from screens.profile_screen import ProfileScreen  # New importBuilder.load_file("carphy.kv")class CarphyApp(App):
-def build(self):
+from screens.profile_screen import ProfileScreen
+from screens.stock_screen import StockScreen  # New import
+
+Builder.load_file("carphy.kv")
+
+class CarphyApp(App):
+    def build(self):
         self.current_user = None
         sm = ScreenManager()
         sm.add_widget(WelcomeScreen(name="welcome"))
@@ -23,10 +29,9 @@ def build(self):
         sm.add_widget(CartScreen(name="cart"))
         sm.add_widget(AdminScreen(name="admin"))
         sm.add_widget(ModeratorScreen(name="moderator"))
-        sm.add_widget(ProfileScreen(name="profile"))  # New screen
+        sm.add_widget(ProfileScreen(name="profile"))
+        sm.add_widget(StockScreen(name="stock"))  # New screen
         return sm
-
 
 if __name__ == "__main__":
     CarphyApp().run()
-

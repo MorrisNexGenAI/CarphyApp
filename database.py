@@ -8,18 +8,16 @@ def init_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
-    # Users table with role
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             pin TEXT NOT NULL,
             department TEXT NOT NULL,
-            role TEXT DEFAULT 'user'  -- user, moderator, admin
+            role TEXT DEFAULT 'user'
         )
     """)
     
-    # Pamphlets table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS pamphlets (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,7 +28,6 @@ def init_db():
         )
     """)
     
-    # Orders table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS orders (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,12 +36,11 @@ def init_db():
             quantity INTEGER,
             questions TEXT,
             instructions TEXT,
-            status TEXT DEFAULT 'pending',  -- pending, arrived, received
+            status TEXT DEFAULT 'pending',
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
     """)
     
-    # Insert sample pamphlets
     cursor.execute("SELECT COUNT(*) FROM pamphlets")
     if cursor.fetchone()[0] == 0:
         sample_pamphlets = [
@@ -57,7 +53,6 @@ def init_db():
         ]
         cursor.executemany("INSERT INTO pamphlets (department, course_name, pamphlet_name, stock) VALUES (?, ?, ?, ?)", sample_pamphlets)
     
-    # Insert default admin
     cursor.execute("SELECT COUNT(*) FROM users WHERE role = 'admin'")
     if cursor.fetchone()[0] == 0:
         cursor.execute("INSERT INTO users (name, pin, department, role) VALUES (?, ?, ?, ?)", ("Admin", "2005mayexcellent", "Admin", "admin"))
@@ -70,8 +65,9 @@ def add_user(name, pin, department, role="user"):
     cursor = conn.cursor()
     try:
         cursor.execute("INSERT INTO users (name, pin, department, role) VALUES (?, ?, ?, ?)", (name, pin, department, role))
+        user_id = cursor.lastrowid
         conn.commit()
-        return True
+        return user_id
     except sqlite3.IntegrityError:
         return False
     finally:
@@ -83,7 +79,22 @@ def get_user(name, pin):
     cursor.execute("SELECT name, pin, department, role, id FROM users WHERE name = ? AND pin = ?", (name, pin))
     user = cursor.fetchone()
     conn.close()
-    return user  # (name, pin, dept, role, id)
+    return user
+
+def get_users():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, name, department, role FROM users")
+    users = cursor.fetchall()
+    conn.close()
+    return users
+
+def delete_user(user_id):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
+    conn.commit()
+    conn.close()
 
 def get_departments():
     conn = sqlite3.connect(DB_PATH)
@@ -114,6 +125,7 @@ def add_order(user_id, pamphlet_name, quantity, questions="", instructions=""):
     cursor = conn.cursor()
     cursor.execute("INSERT INTO orders (user_id, pamphlet_name, quantity, questions, instructions) VALUES (?, ?, ?, ?, ?)", 
                    (user_id, pamphlet_name, quantity, questions, instructions))
+    cursor.execute("UPDATE pamphlets SET stock = stock - ? WHERE pamphlet_name = ?", (quantity, pamphlet_name))  # Decrease stock
     conn.commit()
     conn.close()
 
@@ -135,7 +147,22 @@ def update_order_status(order_id, status):
     conn.commit()
     conn.close()
 
-# Reset database once to fix schema
-if os.path.exists(DB_PATH):
-    os.remove(DB_PATH)
+def update_stock(pamphlet_name, stock):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("UPDATE pamphlets SET stock = ? WHERE pamphlet_name = ?", (stock, pamphlet_name))
+    conn.commit()
+    conn.close()
+
+def get_all_pamphlets():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT pamphlet_name, stock, department, course_name FROM pamphlets")
+    pamphlets = cursor.fetchall()
+    conn.close()
+    return pamphlets  # Returns [(pamphlet_name, stock, dept, course_name), ...]
+
+# Comment out reset after first run
+# if os.path.exists(DB_PATH):
+#     os.remove(DB_PATH)
 init_db()
